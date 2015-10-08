@@ -9,11 +9,13 @@ import re
 import webbrowser
 
 
+################################################################################
 class NonBlockingStreamReader:
     def __init__(self, stream, maxline=1000):
         """non-blocking stream reader to read the stdout from ipython notebook.
 
-        detail about this class is described [here](http://eyalarubas.com/python-subproc-nonblock.html)
+        detail about this class is described
+        [here](http://eyalarubas.com/python-subproc-nonblock.html)
         :param stream: the stream to read from.
                 Usually a process' stdout or stderr.
         :param maxline: the maximum line stored in queue
@@ -48,6 +50,7 @@ class NonBlockingStreamReader:
         return [i for i in self._q.queue]
 
 
+################################################################################
 class Application(tk.Frame):
     def __init__(self):
         """
@@ -57,16 +60,17 @@ class Application(tk.Frame):
         """
         tk.Frame.__init__(self)
         self.master.title("inlauncher")
-        self.current_ip = u"IP address of notebook"
+        self.current_ip = u"Click above button to start"
         self.grid()
 
-        self.start_button = tk.Button(self, text="Start notebook", command=self.start)
-        self.quit_button = tk.Button(self, text="Close notebook", command=self.quit)
-        self.ip_label = tk.Label(self, text=self.current_ip, 
-                                 font='Times 12')
+        self.start_button = tk.Button(self, text="Start notebook",
+                                       command=self.start)
+        self.close_button = tk.Button(self, text="Close notebook",
+                                     command=self.close, state=tk.DISABLED)
+        self.ip_label = tk.Label(self, text=self.current_ip, font='Times 12')
         self.start_button.grid(column=0, columnspan=4, row=0)
         self.ip_label.grid(column=0, columnspan=4, row=1)
-        self.quit_button.grid(column=0, columnspan=4, row=2)
+        self.close_button.grid(column=0, columnspan=4, row=2)
 
         self.process = None
         self.record_reader = None
@@ -77,16 +81,32 @@ class Application(tk.Frame):
         :return: None
         """
         self.current_ip = self.start_notebook()
-        self.ip_label.configure(text=self.current_ip, font='Times 12 italic underline', fg='blue')
+        self.ip_label.configure(text=self.current_ip,
+                                font='Times 12 italic underline', fg='blue')
         self.ip_label.bind("<Button-1>", lambda x: webbrowser.open_new(self.current_ip))
+        self.start_button.configure(state=tk.DISABLED)
+        self.close_button.configure(state=tk.NORMAL)
+
+    def close(self):
+        """
+        close ipython notebook server
+        :return: None
+        """
+        if self.process:
+            self.process.terminate()
+            self.record_reader = None
+        self.start_button.configure(state=tk.NORMAL)
+        self.close_button.configure(state=tk.DISABLED)
+        self.current_ip = u"Click above button to start"
+        self.ip_label.configure(text=self.current_ip,
+                                font='Times 12', fg='black')
 
     def quit(self):
         """
         Quit Application
         :return: None
         """
-        if self.process:
-            self.process.terminate()
+        self.close()
         self.master.quit()
 
     def start_notebook(self):
@@ -94,20 +114,11 @@ class Application(tk.Frame):
 
         :return: ip and port information string
         """
-        self.process = subprocess.Popen(["ipython", "notebook"], stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+        self.process = subprocess.Popen(["ipython", "notebook"],
+                                        stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
         self.record_reader = NonBlockingStreamReader(self.process.stdout)
         sleep(1)
         return self.report_ip()
-
-    def count_length(self):
-        """
-        Count the length of the current IP address and format according to tk requirement
-        "line.column" - line starts from 1 and column starts from 0.
-        [reference](http://infohost.nmt.edu/tcc/help/pubs/tkinter/web/text-index.html)
-
-        :return: a string indicates the length of the current ip
-        """
-        return "1." + str(len(self.current_ip))
 
     def report_ip(self):
         """
@@ -122,6 +133,7 @@ class Application(tk.Frame):
                 current_port = info[2].split('/')[0]
         return current_ip + ":" + current_port
 
-
+    # TODO add record window panel
+    
 if __name__ == "__main__":
     Application().mainloop()
