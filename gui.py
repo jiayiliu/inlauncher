@@ -57,12 +57,13 @@ class Application(tk.Frame):
         """
         tk.Frame.__init__(self)
         self.master.title("inlauncher")
-        self.current_ip = u"IP of ipython notebook"
+        self.current_ip = u"IP address of notebook"
         self.grid()
 
-        self.start_button = tk.Button(self, text="Start ipython notebook", command=self.start)
-        self.quit_button = tk.Button(self, text="Quit", command=self.quit)
-        self.ip_label = tk.Label(self, text=self.current_ip)
+        self.start_button = tk.Button(self, text="Start notebook", command=self.start)
+        self.quit_button = tk.Button(self, text="Close notebook", command=self.quit)
+        self.ip_label = tk.Label(self, text=self.current_ip, 
+                                 font='Times 12')
         self.start_button.grid(column=0, columnspan=4, row=0)
         self.ip_label.grid(column=0, columnspan=4, row=1)
         self.quit_button.grid(column=0, columnspan=4, row=2)
@@ -76,7 +77,7 @@ class Application(tk.Frame):
         :return: None
         """
         self.current_ip = self.start_notebook()
-        self.ip_label.configure(text=self.current_ip)
+        self.ip_label.configure(text=self.current_ip, font='Times 12 italic underline', fg='blue')
         self.ip_label.bind("<Button-1>", lambda x: webbrowser.open_new(self.current_ip))
 
     def quit(self):
