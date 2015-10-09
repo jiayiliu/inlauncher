@@ -1,0 +1,9 @@
+Inlauncher is a simple app to open and close ipython notebook in a user-friendly way.
+
+It is a tk-based python script.  However, to achieve its strength, you could check out the [INSTALL.md](./INSTALL.md) manual.  At the end, you could place the application at any place you want and run ipython notebook from that folder and close the ipython smoothly without using terminal.
+
+# Demo
+
+By double clicking the *gui.py* application, you start a tiny console to control your ipython notebook.
+
+![start](./figure/inlauncher_start.png)
