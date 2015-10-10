@@ -33,3 +33,12 @@
 
 <!--- In the python Launcher panel, check off *Run in a Terminal window*.  If this window disappeared, you can open the *gui.py* again. --->
 	
+# Ubuntu Installation
+
+1. Download gui.py from [here](https://raw.githubusercontent.com/jiayiliu/inlauncher/master/gui.py) to your folder.
+
+2. Download the application launcher [inlauncher.desktop](https://raw.githubusercontent.com/jiayiliu/inlauncher/master/inlauncher.desktop) for a quick-launcher.
+
+3. Edit the file inlauncher.desktop.  Change *full_path_to_gui.py* to your path to the *gui.py* file.
+
+4. Click *inlauncher.desktop* and enjoy ipython notebook.

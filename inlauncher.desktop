@@ -1,0 +1,9 @@
+[Desktop Entry]
+Version=1.0
+Type=Application
+Terminal=false
+Icon[en_US]=python
+Name[en_US]=inlauncher
+Exec=full_path_to_gui.py
+Name=inlauncher
+Icon=python
